@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Clients/">
+    <Project Path="src/Clients/Journal.SharedUI/Journal.SharedUI.csproj" />
+    <Project Path="src/Clients/Journal.Web/Journal.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Core/">
+    <Project Path="src/Core/Journal.Application/Journal.Application.csproj" />
+    <Project Path="src/Core/Journal.Domain/Journal.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/Journal.Infrastructure/Journal.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/Journal.Api/Journal.Api.csproj" />
+  </Folder>
+</Solution>
