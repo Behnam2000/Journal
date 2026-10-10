@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "eTQK4G0Ay80=",
+  "dgSpecHash": "2K1i/juJmK4=",
   "success": true,
   "projectFilePath": "/home/behnam/c_sharp/projects/Journal/src/Presentation/Journal.Api/Journal.Api.csproj",
   "expectedPackageFiles": [
+    "/home/behnam/.nuget/packages/efcore.namingconventions/10.0.1/efcore.namingconventions.10.0.1.nupkg.sha512",
     "/home/behnam/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/behnam/.nuget/packages/mediatr/14.2.0/mediatr.14.2.0.nupkg.sha512",
     "/home/behnam/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",

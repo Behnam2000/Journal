@@ -1,0 +1,16 @@
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/bin/Debug/net10.0/Journal.Application.deps.json
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/bin/Debug/net10.0/Journal.Application.dll
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/bin/Debug/net10.0/Journal.Application.pdb
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/bin/Debug/net10.0/Journal.Domain.dll
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/bin/Debug/net10.0/Journal.Domain.pdb
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.csproj.AssemblyReference.cache
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.AssemblyInfoInputs.cache
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.AssemblyInfo.cs
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.csproj.CoreCompileInputs.cache
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.sourcelink.json
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal..2597F1F1.Up2Date
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.dll
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/refint/Journal.Application.dll
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/Journal.Application.pdb
+/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/Debug/net10.0/ref/Journal.Application.dll
