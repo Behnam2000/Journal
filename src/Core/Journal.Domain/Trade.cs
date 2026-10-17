@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Trade
 {
     public long Id { get; set; }
@@ -51,4 +53,6 @@ public class Trade
     public long DailyJournalId { get; set; }
     public DailyJournal? DailyJournal { get; set; }
 
+    [NotMapped]
+    public string Status => ExitTime.HasValue ? "Closed" : "Open";
 }

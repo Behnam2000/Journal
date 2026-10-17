@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class DailyJournal
 {
     public long Id { get; set; }
@@ -25,5 +27,9 @@ public class DailyJournal
 
     // Relation ONE(DailyJournal) To Many(Trade) - Primary Key
     public ICollection<Trade> Trades { get; set; } = new List<Trade>();
+
+
+    [NotMapped]
+    public string Status => NetPlAmount.HasValue ? "Closed" : "Open";
 
 }
