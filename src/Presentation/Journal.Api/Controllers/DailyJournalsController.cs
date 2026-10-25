@@ -16,7 +16,20 @@ public class DailyJournalsController : ControllerBase
         _mediator = mediator;
     }
 
+    // PUT: api/daily-journals/{id}/close
+    // Calculates the day's final math and saves the qualitative review
+    [HttpPut("{id}/close")]
+    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayCommand command)
+    {
+        // Ensure the ID in the URL matches the command
+        command.Id = id;
 
+        // Send the command to the Application layer
+        var journal = await _mediator.Send(command);
+
+        return Ok(journal);
+
+    }
 
     // POST : api/daily-journals
     // Initializes a new trading day in the morning
@@ -75,20 +88,7 @@ public class DailyJournalsController : ControllerBase
     }
 
 
-    // PUT: api/daily-journals/{id}/close
-    // Calculates the day's final math and saves the qualitative review
-    [HttpPut("{id}/close")]
-    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayCommand command)
-    {
-        // Ensure the ID in the URL matches the command
-        command.Id = id;
 
-        // Send the commandto the Application layer
-        var journal = await _mediator.Send(command);
-
-        return Ok(journal);
-
-    }
 }
 
 // A simple Data Transfer Object (DTO) to control what the user sends in the POST request

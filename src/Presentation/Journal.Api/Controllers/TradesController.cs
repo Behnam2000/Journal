@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Journal.Application.Trades.Queries;
+using Journal.Application.Trades.Commands;
 
 namespace Journal.Api.Controllers;
 
@@ -7,11 +9,11 @@ namespace Journal.Api.Controllers;
 [Route("api/trades")]
 public class TradesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IMediator _mediator;
 
-    public TradesController(AppDbContext context)
+    public TradesController(IMediator mediator)
     {
-        _context = context;
+        _mediator = mediator;
     }
 
 
@@ -20,10 +22,7 @@ public class TradesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllTrades()
     {
-        var trades = await _context.Trades
-            .OrderByDescending(t => t.EntryTime)
-            .ToListAsync();
-
+        var trades = await _mediator.Send(new GetAllTradesQuery());
         return Ok(trades);
     }
 
@@ -32,7 +31,7 @@ public class TradesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTradeById(long id)
     {
-        var trade = await _context.Trades.FindAsync(id);
+        var trade = await _mediator.Send(new GetTradeByIdQuery { Id = id });
 
         if (trade == null) return NotFound("Trade not found");
 
@@ -45,47 +44,39 @@ public class TradesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> LogTrade([FromBody] OpenTradeDto request)
     {
-        // 1. Verify the Daily Journal exists
-        var journal = await _context.DailyJournals.FindAsync(request.DailyJournalId);
-        if (journal == null)
+        try
         {
-            return NotFound($"No daily journal found with ID {request.DailyJournalId}. Did you initialize the day?");
+            var command = new LogTradeCommand
+            {
+                DailyJournalId = request.DailyJournalId,
+                TradeNumber = request.TradeNumber,
+                Pair = request.Pair,
+                Exchange = request.Exchange,
+                Direction = request.Direction,
+                Setup = request.Setup,
+                TimeFrame = request.TimeFrame,
+                EntryThesis = request.EntryThesis,
+                Context = request.Context,
+                EntryPlanned = request.EntryPlanned,
+                Sl = request.Sl,
+                Tp = request.Tp,
+                Size = request.Size,
+                Leverage = request.Leverage,
+                EntryActual = request.EntryActual,
+                EntryTime = request.EntryTime,
+                PsyState = request.PsyState,
+                RiskPercent = request.RiskPercent,
+                RiskAmount = request.RiskAmount,
+                RrPlanned = request.RrPlanned
+            };
+
+            var trade = await _mediator.Send(command);
+            return Ok(trade);
         }
-
-        // 2.Map the DTO to our Trade Entity
-        var trade = new Trade
+        catch (Exception ex)
         {
-            DailyJournalId = request.DailyJournalId,
-            TradeNumber = request.TradeNumber,
-            Pair = request.Pair,
-            Exchange = request.Exchange,
-            Direction = request.Direction,
-            Setup = request.Setup,
-            TimeFrame = request.TimeFrame,
-            EntryThesis = request.EntryThesis,
-            Context = request.Context,
-            EntryPlanned = request.EntryPlanned,
-            Sl = request.Sl,
-            Tp = request.Tp,
-            Size = request.Size,
-            Leverage = request.Leverage,
-            EntryActual = request.EntryActual,
-            EntryTime = request.EntryTime,
-            PsyState = request.PsyState,
-            RiskPercent = request.RiskPercent,
-            RiskAmount = request.RiskAmount,
-            RrPlanned = request.RrPlanned
-            // Notice: We don't set Exit, PlAmount, Outcome, etc. because the trade is active!
-        };
-
-        // 3. Increment the daily total trades counter
-        journal.TotalTrades += 1;
-
-        // 4. Save to database
-        _context.Trades.Add(trade);
-        await _context.SaveChangesAsync();
-
-        return Ok(trade);
+            return NotFound(ex.Message);
+        }
     }
 
     // PUT : api/trades/{id}/close
@@ -93,42 +84,29 @@ public class TradesController : ControllerBase
     [HttpPut("{id}/close")]
     public async Task<IActionResult> CloseTrade(long id, [FromBody] CloseTradeDto request)
     {
-        // 1. Find the active trade and include its parent journal
-        var trade = await _context.Trades
-            .Include(t => t.DailyJournal)
-            .FirstOrDefaultAsync(t => t.Id == id);
-
-        if (trade == null) return NotFound("Trade Not Found");
-
-        // 2. Update the exit fields
-        trade.Exit = request.Exit;
-        trade.ExitTime = request.ExitTime;
-        trade.ExitReason = request.ExitReason;
-        trade.Fees = request.Fees;
-        trade.FollowedRules = request.FollowedRules;
-        trade.PlAmount = request.PlAmount;
-        trade.PlPercent = request.PlPercent;
-        trade.RealizedR = request.RealizedR;
-        trade.Outcome = request.Outcome;
-        trade.Fees = request.Fees;
-
-        // ! subtract the fee directly from the sumbitted P&L for that specific trade
-        trade.PlAmount = request.PlAmount - request.Fees;
-        trade.PlAmount = request.PlPercent;
-
-        // 3. Update the daily journal Win/Loss counters based on the outcome
-        if (request.Outcome.Equals("Win", StringComparison.OrdinalIgnoreCase))
+        try
         {
-            trade.DailyJournal.Wins += 1;
+            var command = new CloseTradeCommand
+            {
+                Id = id,
+                Exit = request.Exit,
+                ExitTime = request.ExitTime,
+                ExitReason = request.ExitReason,
+                Fees = request.Fees,
+                PlAmount = request.PlAmount,
+                PlPercent = request.PlPercent,
+                RealizedR = request.RealizedR,
+                Outcome = request.Outcome,
+                FollowedRules = request.FollowedRules
+            };
+
+            var trade = await _mediator.Send(command);
+            return Ok(trade);
         }
-        else if (request.Outcome.Equals("Loss", StringComparison.OrdinalIgnoreCase))
+        catch (Exception ex)
         {
-            trade.DailyJournal.Losses += 1;
+            return NotFound(ex.Message);
         }
-
-        await _context.SaveChangesAsync();
-
-        return Ok(trade);
     }
 
     // PUT: api/trades/{id}
@@ -136,32 +114,37 @@ public class TradesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOpenTrade(long id, [FromBody] UpdateOpenTradeDto request)
     {
-        var trade = await _context.Trades.FindAsync(id);
+        try
+        {
+            var command = new UpdateOpenTradeCommand
+            {
+                Id = id,
+                Pair = request.Pair,
+                Exchange = request.Exchange,
+                Direction = request.Direction,
+                Setup = request.Setup,
+                TimeFrame = request.TimeFrame,
+                EntryThesis = request.EntryThesis,
+                Context = request.Context,
+                EntryPlanned = request.EntryPlanned,
+                Sl = request.Sl,
+                Tp = request.Tp,
+                Size = request.Size,
+                Leverage = request.Leverage,
+                EntryActual = request.EntryActual,
+                PsyState = request.PsyState,
+                RiskPercent = request.RiskPercent,
+                RiskAmount = request.RiskAmount,
+                RrPlanned = request.RrPlanned
+            };
 
-        if (trade == null) return NotFound("Trade not found.");
-
-        // Update the editable entry & planning metrics
-        trade.Pair = request.Pair;
-        trade.Exchange = request.Exchange;
-        trade.Direction = request.Direction;
-        trade.Setup = request.Setup;
-        trade.TimeFrame = request.TimeFrame;
-        trade.EntryThesis = request.EntryThesis;
-        trade.Context = request.Context;
-        trade.EntryPlanned = request.EntryPlanned;
-        trade.Sl = request.Sl;
-        trade.Tp = request.Tp;
-        trade.Size = request.Size;
-        trade.Leverage = request.Leverage;
-        trade.EntryActual = request.EntryActual;
-        trade.PsyState = request.PsyState;
-        trade.RiskPercent = request.RiskPercent;
-        trade.RiskAmount = request.RiskAmount;
-        trade.RrPlanned = request.RrPlanned;
-
-        await _context.SaveChangesAsync();
-
-        return Ok(trade);
+            var trade = await _mediator.Send(command);
+            return Ok(trade);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
 
