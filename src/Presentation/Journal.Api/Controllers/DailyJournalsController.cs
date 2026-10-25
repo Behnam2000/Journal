@@ -1,3 +1,5 @@
+using Journal.Application.Journals.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,12 +9,14 @@ namespace Journal.Api.Controllers;
 [Route("api/daily-journals")]
 public class DailyJournalsController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IMediator _mediator;
 
-    public DailyJournalsController(AppDbContext context)
+    public DailyJournalsController(IMediator mediator)
     {
-        _context = context;
+        _mediator = mediator;
     }
+
+
 
     // POST : api/daily-journals
     // Initializes a new trading day in the morning
@@ -74,63 +78,16 @@ public class DailyJournalsController : ControllerBase
     // PUT: api/daily-journals/{id}/close
     // Calculates the day's final math and saves the qualitative review
     [HttpPut("{id}/close")]
-    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayDto request)
+    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayCommand command)
     {
-        // 1. Fetch the journal AND explicitly load the trades to do the math
-        var journal = await _context.DailyJournals
-            .Include(j => j.Trades)
-            .FirstOrDefaultAsync(j => j.Id == id);
+        // Ensure the ID in the URL matches the command
+        command.Id = id;
 
-        if (journal == null) return NotFound();
-
-        // 2. Filter to only look at closed trades
-        var closedTrades = journal.Trades.Where(t => t.ExitTime.HasValue).ToList();
-
-        // 3. Recalculate Counters (ensures 100% accuracy)
-        journal.TotalTrades = (short)closedTrades.Count;
-        journal.Wins = (short)closedTrades.Count(t => t.Outcome == "Win");
-        journal.Losses = (short)closedTrades.Count(t => t.Outcome == "Loss");
-
-        // 4. Calculate Win Rate (%)
-        if (journal.TotalTrades > 0)
-        {
-            journal.WinRate = Math.Round((decimal)journal.Wins / journal.TotalTrades * 100, 2);
-        }
-        else
-        {
-            journal.WinRate = 0;
-        }
-
-        // 5. Calculate P&L and Balances
-        journal.NetPlAmount = closedTrades.Sum(t => t.PlAmount ?? 0);
-        journal.EndingBalance = journal.StartingBalance + journal.NetPlAmount;
-
-
-        // 6. Find Best and Worst Trades
-        if (closedTrades.Any())
-        {
-            var bestTrade = closedTrades.OrderByDescending(t => t.PlAmount).First();
-            journal.BestTradeAmount = bestTrade.PlAmount;
-            journal.BestTradePair = bestTrade.Pair;
-
-            var worstTrade = closedTrades.OrderBy(t => t.PlAmount).First();
-            journal.WorstTradeAmount = worstTrade.PlAmount;
-            journal.WorstTradePair = worstTrade.Pair;
-        }
-
-        // 7. Save the Qualitative Review from the user
-        journal.OverallTrend = request.OverallTrend;
-        journal.Volatility = request.Volatility;
-        journal.MpState = request.MpState;
-        journal.News = request.News;
-        journal.Notes = request.Notes;
-        journal.FollowedPlanOv = request.FollowedPlanOv;
-        journal.Lesson = request.Lesson;
-        journal.ToImprove = request.ToImprove;
-
-        await _context.SaveChangesAsync();
+        // Send the commandto the Application layer
+        var journal = await _mediator.Send(command);
 
         return Ok(journal);
+
     }
 }
 
@@ -141,14 +98,4 @@ public class CreateJournalDto
     public decimal StartingBalance { get; set; }
 }
 
-public class CloseDayDto
-{
-    public string OverallTrend { get; set; }
-    public string Volatility { get; set; }
-    public string MpState { get; set; }
-    public string News { get; set; }
-    public string Notes { get; set; }
-    public string FollowedPlanOv { get; set; }
-    public string Lesson { get; set; }
-    public string ToImprove { get; set; }
-}
+
