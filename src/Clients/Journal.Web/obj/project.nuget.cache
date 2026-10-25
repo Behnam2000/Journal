@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "K8OewVzg51M=",
+  "dgSpecHash": "rkcFVMBSJqk=",
   "success": true,
   "projectFilePath": "/home/behnam/c_sharp/projects/Journal/src/Clients/Journal.Web/Journal.Web.csproj",
   "expectedPackageFiles": [
-    "/home/behnam/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.12/microsoft.aspnetcore.app.internal.assets.10.0.12.nupkg.sha512"
+    "/home/behnam/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.13/microsoft.aspnetcore.app.internal.assets.10.0.13.nupkg.sha512"
   ],
   "logs": []
 }
