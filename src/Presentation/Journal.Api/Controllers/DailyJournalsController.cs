@@ -1,3 +1,4 @@
+using Journal.Application;
 using Journal.Application.Journals.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace Journal.Api.Controllers;
 public class DailyJournalsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IAppDbContext _context;
 
-    public DailyJournalsController(IMediator mediator)
+    public DailyJournalsController(IMediator mediator, IAppDbContext context)
     {
         _mediator = mediator;
+        _context = context;
     }
 
     // PUT: api/daily-journals/{id}/close
