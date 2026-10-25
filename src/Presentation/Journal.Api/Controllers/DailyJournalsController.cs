@@ -1,5 +1,6 @@
-using Journal.Application;
+using Journal.Application.Common.Interfaces;
 using Journal.Application.Journals.Commands;
+using Journal.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,11 +1,11 @@
+using Journal.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Journal.Application;
+
+namespace Journal.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IAppDbContext
 {
-
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
 
     public DbSet<DailyJournal> DailyJournals { get; set; }
 
@@ -14,11 +14,6 @@ public class AppDbContext : DbContext, IAppDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Configure One To Many: DailyJournal -> Trade
-        modelBuilder.Entity<Trade>()
-            .HasOne(t => t.DailyJournal)
-            .WithMany(t => t.Trades)
-            .HasForeignKey(t => t.DailyJournalId);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

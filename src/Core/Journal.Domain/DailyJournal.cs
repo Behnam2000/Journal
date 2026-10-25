@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Journal.Domain.Entities;
+
 public class DailyJournal
 {
     public long Id { get; set; }

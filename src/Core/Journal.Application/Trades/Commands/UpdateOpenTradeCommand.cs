@@ -1,3 +1,4 @@
+using Journal.Application.Common.Interfaces;
 using MediatR;
 
 namespace Journal.Application.Trades.Commands;
