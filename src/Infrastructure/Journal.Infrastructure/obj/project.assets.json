@@ -364,7 +364,8 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "Journal.Domain": "1.0.0",
-          "MediatR": "14.2.0"
+          "MediatR": "14.2.0",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
         },
         "compile": {
           "bin/placeholder/Journal.Application.dll": {}
@@ -978,7 +979,6 @@
         "net10.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1032,7 +1032,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.112/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
