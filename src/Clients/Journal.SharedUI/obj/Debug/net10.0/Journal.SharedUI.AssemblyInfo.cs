@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Journal.SharedUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e99ee5672a01915f301c47ccca3d095c809b1797")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+072ccab2a4cbbbba2ea119861f494673d59881e0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Journal.SharedUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Journal.SharedUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

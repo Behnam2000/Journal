@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+<<<<<<< HEAD
     
+=======
+>>>>>>> devin/1792968709-step2-layering
     <PackageReference Include="Microsoft.AspNetCore.OpenApi"  />
     
   </ItemGroup>

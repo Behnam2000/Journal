@@ -7,9 +7,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+<<<<<<< HEAD
     <PackageReference Include="EFCore.NamingConventions"  />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
      
+=======
+    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+>>>>>>> devin/1792968709-step2-layering
   </ItemGroup>
 
   

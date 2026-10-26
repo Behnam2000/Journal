@@ -1,7 +1,7 @@
 using Journal.Application.Journals.Commands;
+using Journal.Application.Journals.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Journal.Api.Controllers;
 
@@ -19,65 +19,46 @@ public class DailyJournalsController : ControllerBase
     // PUT: api/daily-journals/{id}/close
     // Calculates the day's final math and saves the qualitative review
     [HttpPut("{id}/close")]
-    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayCommand command)
+    public async Task<IActionResult> CloseDay(long id, [FromBody] CloseDayCommand command, CancellationToken cancellationToken)
     {
-        // Ensure the ID in the URL matches the command
         command.Id = id;
 
-        // Send the command to the Application layer
-        var journal = await _mediator.Send(command);
+        var journal = await _mediator.Send(command, cancellationToken);
 
         return Ok(journal);
-
     }
 
-    // POST : api/daily-journals
+    // POST: api/daily-journals
     // Initializes a new trading day in the morning
     [HttpPost]
-    public async Task<IActionResult> CreateJournal([FromBody] CreateJournalDto request)
+    public async Task<IActionResult> CreateJournal([FromBody] CreateJournalCommand command, CancellationToken cancellationToken)
     {
-        // Prevent creating duplicate journals for the same day
-        var exists = await _context.DailyJournals.AnyAsync(j => j.Date == request.Date);
-        if (exists)
+        var journal = await _mediator.Send(command, cancellationToken);
+
+        if (journal == null)
         {
-            return BadRequest($"A journal for the date {request.Date} already exists");
+            return BadRequest($"A journal for the date {command.Date} already exists");
         }
 
-        var journal = new DailyJournal
-        {
-            Date = request.Date,
-            Day = request.Date.DayOfWeek.ToString(), // Auto-calculates "Monday", "Tuesday", etc.
-            StartingBalance = request.StartingBalance
-        };
-
-        _context.DailyJournals.Add(journal);
-        await _context.SaveChangesAsync();
-
-        // Returns a 201 Created response with the URL to fetch the new journal
         return CreatedAtAction(nameof(GetJournalByDate), new { date = journal.Date.ToString("yyyy-MM-dd") }, journal);
     }
 
-    // GET : api/daily-journals
+    // GET: api/daily-journals
     // Fetches your dashboard history
     [HttpGet]
-    public async Task<IActionResult> GetAllJournals()
+    public async Task<IActionResult> GetAllJournals(CancellationToken cancellationToken)
     {
-        var journals = await _context.DailyJournals
-            .OrderByDescending(j => j.Date)
-            .ToListAsync();
+        var journals = await _mediator.Send(new GetAllJournalsQuery(), cancellationToken);
 
         return Ok(journals);
     }
 
-
     // GET: api/daily-journals/2026-10-10
-    // Fetches a specific day AND all of the trades associated with it
+    // Fetches a specific day and all of its trades
     [HttpGet("{date}")]
-    public async Task<IActionResult> GetJournalByDate(DateOnly date)
+    public async Task<IActionResult> GetJournalByDate(DateOnly date, CancellationToken cancellationToken)
     {
-        var journal = await _context.DailyJournals
-            .Include(j => j.Trades)     // EF Core explicitly loads the related trades
-            .FirstOrDefaultAsync(j => j.Date == date);
+        var journal = await _mediator.Send(new GetJournalByDateQuery { Date = date }, cancellationToken);
 
         if (journal == null)
         {
@@ -86,16 +67,4 @@ public class DailyJournalsController : ControllerBase
 
         return Ok(journal);
     }
-
-
-
 }
-
-// A simple Data Transfer Object (DTO) to control what the user sends in the POST request
-public class CreateJournalDto
-{
-    public DateOnly Date { get; set; }
-    public decimal StartingBalance { get; set; }
-}
-
-
