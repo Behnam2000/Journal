@@ -1,5 +1,7 @@
+using Journal.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Queries;
 

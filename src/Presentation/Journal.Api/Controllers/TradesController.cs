@@ -73,9 +73,9 @@ public class TradesController : ControllerBase
             var trade = await _mediator.Send(command);
             return Ok(trade);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return NotFound(ex.Message);
+            return NotFound();
         }
     }
 

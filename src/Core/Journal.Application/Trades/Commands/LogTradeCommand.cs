@@ -1,5 +1,6 @@
+using Journal.Application.Common.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Commands;
 
@@ -72,7 +73,7 @@ public class LogTradeCommandHandler : IRequestHandler<LogTradeCommand, Trade>
         };
 
         // 3. Increment the daily total trades counter
-        journal.TotalTrades += 1;
+        // journal.TotalTrades += 1;
 
         // 4. Save to database
         _context.Trades.Add(trade);

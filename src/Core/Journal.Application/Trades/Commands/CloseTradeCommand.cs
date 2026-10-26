@@ -1,5 +1,7 @@
+using Journal.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Commands;
 
@@ -52,17 +54,16 @@ public class CloseTradeCommandHandler : IRequestHandler<CloseTradeCommand, Trade
 
         // ! subtract the fee directly from the submitted P&L for that specific trade
         trade.PlAmount = request.PlAmount - request.Fees;
-        trade.PlAmount = request.PlPercent;
 
         // 3. Update the daily journal Win/Loss counters based on the outcome
         if (request.Outcome.Equals("Win", StringComparison.OrdinalIgnoreCase))
         {
             trade.DailyJournal.Wins += 1;
         }
-        else if (request.Outcome.Equals("Loss", StringComparison.OrdinalIgnoreCase))
-        {
-            trade.DailyJournal.Losses += 1;
-        }
+        // else if (request.Outcome.Equals("Loss", StringComparison.OrdinalIgnoreCase))
+        // {
+        //     trade.DailyJournal.Losses += 1;
+        // }
 
         await _context.SaveChangesAsync(cancellationToken);
 

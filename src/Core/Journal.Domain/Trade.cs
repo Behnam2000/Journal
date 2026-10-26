@@ -1,4 +1,8 @@
+namespace Journal.Domain.Entities;
+
 using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Journal.Domain.Entities;
 
 public class Trade
 {
