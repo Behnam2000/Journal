@@ -1,6 +1,5 @@
 using Journal.Application.Common.Interfaces;
 using MediatR;
-using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Commands;
 
