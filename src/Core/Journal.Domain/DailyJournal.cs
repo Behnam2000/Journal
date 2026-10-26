@@ -1,3 +1,5 @@
+namespace Journal.Domain.Entities;
+
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class DailyJournal

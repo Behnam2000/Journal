@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Journal.Application;
+namespace Journal.Application.Common.Interfaces;
 
 public interface IAppDbContext
 {

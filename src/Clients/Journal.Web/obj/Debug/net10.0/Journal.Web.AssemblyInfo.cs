@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Journal.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9307b46938da6854fe8eb7fbc1e7f124b47d8c34")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae8481db4064485a226573681ff9181adcb01e22")]
 [assembly: System.Reflection.AssemblyProductAttribute("Journal.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Journal.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

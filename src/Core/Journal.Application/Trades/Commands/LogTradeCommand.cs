@@ -1,5 +1,5 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Commands;
 

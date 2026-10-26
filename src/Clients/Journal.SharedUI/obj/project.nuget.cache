@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ABciUEqGTZc=",
+  "dgSpecHash": "FoOFd7hgTa0=",
   "success": true,
   "projectFilePath": "/home/behnam/c_sharp/projects/Journal/src/Clients/Journal.SharedUI/Journal.SharedUI.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,7 @@
     "/home/behnam/.nuget/packages/microsoft.aspnetcore.components.web/10.0.12/microsoft.aspnetcore.components.web.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.aspnetcore.metadata/10.0.12/microsoft.aspnetcore.metadata.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.configuration/10.0.12/microsoft.extensions.configuration.10.0.12.nupkg.sha512",
-    "/home/behnam/.nuget/packages/microsoft.extensions.configuration.abstractions/10.0.12/microsoft.extensions.configuration.abstractions.10.0.12.nupkg.sha512",
+    "/home/behnam/.nuget/packages/microsoft.extensions.configuration.abstractions/10.0.13/microsoft.extensions.configuration.abstractions.10.0.13.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.configuration.binder/10.0.12/microsoft.extensions.configuration.binder.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.dependencyinjection/10.0.12/microsoft.extensions.dependencyinjection.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.12/microsoft.extensions.dependencyinjection.abstractions.10.0.12.nupkg.sha512",
@@ -20,7 +20,7 @@
     "/home/behnam/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.12/microsoft.extensions.logging.abstractions.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.options/10.0.12/microsoft.extensions.options.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.options.configurationextensions/10.0.12/microsoft.extensions.options.configurationextensions.10.0.12.nupkg.sha512",
-    "/home/behnam/.nuget/packages/microsoft.extensions.primitives/10.0.12/microsoft.extensions.primitives.10.0.12.nupkg.sha512",
+    "/home/behnam/.nuget/packages/microsoft.extensions.primitives/10.0.13/microsoft.extensions.primitives.10.0.13.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.extensions.validation/10.0.12/microsoft.extensions.validation.10.0.12.nupkg.sha512",
     "/home/behnam/.nuget/packages/microsoft.jsinterop/10.0.12/microsoft.jsinterop.10.0.12.nupkg.sha512"
   ],

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
-using Journal.Application;
+using Journal.Application.Common.Interfaces;
+using Journal.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -68,6 +68,7 @@
             "Microsoft.AspNetCore.OpenApi": "10.0.12",
             "Microsoft.EntityFrameworkCore": "10.0.13",
             "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Microsoft.Extensions.Configuration.Abstractions": "10.0.13",
             "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
           },
           "imports": [
@@ -412,6 +413,7 @@
             "Microsoft.AspNetCore.OpenApi": "10.0.12",
             "Microsoft.EntityFrameworkCore": "10.0.13",
             "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Microsoft.Extensions.Configuration.Abstractions": "10.0.13",
             "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
           },
           "imports": [
@@ -754,7 +756,17 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "EFCore.NamingConventions": {
+              "target": "Package",
+              "version": "[10.0.1, )",
+              "versionCentrallyManaged": true
+            },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[10.0.13, )",
+              "versionCentrallyManaged": true
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
               "version": "[10.0.13, )",
               "versionCentrallyManaged": true
@@ -772,6 +784,7 @@
             "Microsoft.AspNetCore.OpenApi": "10.0.12",
             "Microsoft.EntityFrameworkCore": "10.0.13",
             "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Microsoft.Extensions.Configuration.Abstractions": "10.0.13",
             "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
           },
           "imports": [

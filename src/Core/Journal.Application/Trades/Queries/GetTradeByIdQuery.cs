@@ -1,4 +1,5 @@
 using MediatR;
+using Journal.Application.Common.Interfaces;
 
 namespace Journal.Application.Trades.Queries;
 
