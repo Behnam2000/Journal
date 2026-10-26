@@ -55,14 +55,14 @@ public class CloseTradeCommandHandler : IRequestHandler<CloseTradeCommand, Trade
         trade.PlAmount = request.PlAmount - request.Fees;
 
         // 3. Update the daily journal Win/Loss counters based on the outcome
-        if (request.Outcome.Equals("Win", StringComparison.OrdinalIgnoreCase))
-        {
-            trade.DailyJournal.Wins += 1;
-        }
-        // else if (request.Outcome.Equals("Loss", StringComparison.OrdinalIgnoreCase))
+        // if (request.Outcome.Equals("Win", StringComparison.OrdinalIgnoreCase))
         // {
-        //     trade.DailyJournal.Losses += 1;
+        //     trade.DailyJournal.Wins += 1;
         // }
+        // // else if (request.Outcome.Equals("Loss", StringComparison.OrdinalIgnoreCase))
+        // // {
+        // //     trade.DailyJournal.Losses += 1;
+        // // }
 
         await _context.SaveChangesAsync(cancellationToken);
 
