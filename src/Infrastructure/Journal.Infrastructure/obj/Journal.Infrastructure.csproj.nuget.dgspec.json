@@ -13,6 +13,8 @@
         "packagesPath": "/home/behnam/.nuget/packages/",
         "outputPath": "/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Application/obj/",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "CentralPackageTransitivePinningEnabled": true,
         "configFilePaths": [
           "/home/behnam/.nuget/NuGet/NuGet.Config"
         ],
@@ -20,7 +22,6 @@
           "net10.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -51,18 +52,23 @@
           "dependencies": {
             "MediatR": {
               "target": "Package",
-              "version": "[14.2.0, )"
+              "version": "[14.2.0, )",
+              "versionCentrallyManaged": true
             },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.13, )"
-            },
-            "Npgsql.EntityFrameworkCore.PostgreSQL": {
-              "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.13, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "EFCore.NamingConventions": "10.0.1",
+            "MediatR": "14.2.0",
+            "Microsoft.AspNetCore.Components.Web": "10.0.12",
+            "Microsoft.AspNetCore.OpenApi": "10.0.12",
+            "Microsoft.EntityFrameworkCore": "10.0.13",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
           },
           "imports": [
             "net461",
@@ -80,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -367,6 +373,8 @@
         "packagesPath": "/home/behnam/.nuget/packages/",
         "outputPath": "/home/behnam/c_sharp/projects/Journal/src/Core/Journal.Domain/obj/",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "CentralPackageTransitivePinningEnabled": true,
         "configFilePaths": [
           "/home/behnam/.nuget/NuGet/NuGet.Config"
         ],
@@ -374,7 +382,6 @@
           "net10.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -398,6 +405,15 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
+          "centralPackageVersions": {
+            "EFCore.NamingConventions": "10.0.1",
+            "MediatR": "14.2.0",
+            "Microsoft.AspNetCore.Components.Web": "10.0.12",
+            "Microsoft.AspNetCore.OpenApi": "10.0.12",
+            "Microsoft.EntityFrameworkCore": "10.0.13",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
+          },
           "imports": [
             "net461",
             "net462",
@@ -414,7 +430,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -701,6 +717,8 @@
         "packagesPath": "/home/behnam/.nuget/packages/",
         "outputPath": "/home/behnam/c_sharp/projects/Journal/src/Infrastructure/Journal.Infrastructure/obj/",
         "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "CentralPackageTransitivePinningEnabled": true,
         "configFilePaths": [
           "/home/behnam/.nuget/NuGet/NuGet.Config"
         ],
@@ -708,7 +726,6 @@
           "net10.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -739,12 +756,23 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.12, )"
+              "version": "[10.0.13, )",
+              "versionCentrallyManaged": true
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[10.0.3, )"
+              "version": "[10.0.3, )",
+              "versionCentrallyManaged": true
             }
+          },
+          "centralPackageVersions": {
+            "EFCore.NamingConventions": "10.0.1",
+            "MediatR": "14.2.0",
+            "Microsoft.AspNetCore.Components.Web": "10.0.12",
+            "Microsoft.AspNetCore.OpenApi": "10.0.12",
+            "Microsoft.EntityFrameworkCore": "10.0.13",
+            "Microsoft.EntityFrameworkCore.Design": "10.0.13",
+            "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3"
           },
           "imports": [
             "net461",
@@ -762,7 +790,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.113/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

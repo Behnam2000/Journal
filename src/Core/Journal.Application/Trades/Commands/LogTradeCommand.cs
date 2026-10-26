@@ -72,7 +72,7 @@ public class LogTradeCommandHandler : IRequestHandler<LogTradeCommand, Trade>
         };
 
         // 3. Increment the daily total trades counter
-        journal.TotalTrades += 1;
+        // journal.TotalTrades += 1;
 
         // 4. Save to database
         _context.Trades.Add(trade);

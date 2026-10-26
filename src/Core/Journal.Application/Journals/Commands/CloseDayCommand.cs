@@ -52,7 +52,7 @@ public class CloseDayCommandHandler : IRequestHandler<CloseDayCommand, DailyJour
         var totalFees = closedTrades.Sum(t => t.Fees ?? 0);
 
         // 5. Calculate P&L and Balances
-        journal.NetPlAmount = grossPl - totalFees;
+        // journal.NetPlAmount = grossPl - totalFees;
         journal.EndingBalance = journal.StartingBalance + journal.NetPlAmount;
 
         // 6. Find Best and Worst Trades
