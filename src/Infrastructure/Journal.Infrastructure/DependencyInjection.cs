@@ -17,6 +17,16 @@ public static class DependencyInjection
         // Resolve the interface to the same scoped AppDbContext instance.
         services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
+        services.AddIdentityCore<Microsoft.AspNetCore.Identity.IdentityUser>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequiredLength = 8;
+            options.User.RequireUniqueEmail = true;
+        })
+        .AddEntityFrameworkStores<AppDbContext>();
+
+        services.AddScoped<IIdentityService, Identity.IdentityService>();
+
         return services;
     }
 }

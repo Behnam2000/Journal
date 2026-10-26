@@ -2,9 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Journal.Application.Trades.Queries;
 using Journal.Application.Trades.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Journal.Api.Controllers;
 
+[Authorize] // <--- This locks down every endpoint in this controller
 [ApiController]
 [Route("api/trades")]
 public class TradesController : ControllerBase

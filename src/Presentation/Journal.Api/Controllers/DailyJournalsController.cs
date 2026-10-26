@@ -1,10 +1,12 @@
 using Journal.Application.Journals.Commands;
 using Journal.Application.Journals.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journal.Api.Controllers;
 
+[Authorize] // <--- This locks down every endpoint in this controller
 [ApiController]
 [Route("api/daily-journals")]
 public class DailyJournalsController : ControllerBase
