@@ -42,7 +42,7 @@ public class TradesController : ControllerBase
     // POST : api/trades
     // Logs a new trade entry (Active Position)
     [HttpPost]
-    public async Task<IActionResult> LogTrade([FromBody] OpenTradeDto request)
+    public async Task<IActionResult> LogTrade([FromBody] LogTradeCommand request)
     {
         try
         {
@@ -82,7 +82,7 @@ public class TradesController : ControllerBase
     // PUT : api/trades/{id}/close
     // Updates an active position with the exit results
     [HttpPut("{id}/close")]
-    public async Task<IActionResult> CloseTrade(long id, [FromBody] CloseTradeDto request)
+    public async Task<IActionResult> CloseTrade(long id, [FromBody] CloseTradeCommand request)
     {
         try
         {
@@ -112,7 +112,7 @@ public class TradesController : ControllerBase
     // PUT: api/trades/{id}
     // Updates the details of an existing open trade
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOpenTrade(long id, [FromBody] UpdateOpenTradeDto request)
+    public async Task<IActionResult> UpdateOpenTrade(long id, [FromBody] UpdateOpenTradeCommand request)
     {
         try
         {
@@ -152,60 +152,60 @@ public class TradesController : ControllerBase
 
 // --- Data Transfer Objects (DTOs) ---
 
-public class OpenTradeDto
-{
-    public long DailyJournalId { get; set; } // Links to the day
-    public int TradeNumber { get; set; }
-    public string Pair { get; set; }
-    public string Exchange { get; set; }
-    public string Direction { get; set; }
-    public string Setup { get; set; }
-    public string TimeFrame { get; set; }
-    public string EntryThesis { get; set; }
-    public string Context { get; set; }
-    public decimal EntryPlanned { get; set; }
-    public decimal Sl { get; set; }
-    public decimal Tp { get; set; }
-    public decimal Size { get; set; }
-    public decimal Leverage { get; set; }
-    public decimal EntryActual { get; set; }
-    public DateTimeOffset EntryTime { get; set; }
-    public string PsyState { get; set; }
-    public decimal RiskPercent { get; set; }
-    public decimal RiskAmount { get; set; }
-    public decimal RrPlanned { get; set; }
-}
+// public class OpenTradeDto
+// {
+//     public long DailyJournalId { get; set; } // Links to the day
+//     public int TradeNumber { get; set; }
+//     public string Pair { get; set; }
+//     public string Exchange { get; set; }
+//     public string Direction { get; set; }
+//     public string Setup { get; set; }
+//     public string TimeFrame { get; set; }
+//     public string EntryThesis { get; set; }
+//     public string Context { get; set; }
+//     public decimal EntryPlanned { get; set; }
+//     public decimal Sl { get; set; }
+//     public decimal Tp { get; set; }
+//     public decimal Size { get; set; }
+//     public decimal Leverage { get; set; }
+//     public decimal EntryActual { get; set; }
+//     public DateTimeOffset EntryTime { get; set; }
+//     public string PsyState { get; set; }
+//     public decimal RiskPercent { get; set; }
+//     public decimal RiskAmount { get; set; }
+//     public decimal RrPlanned { get; set; }
+// }
 
-public class CloseTradeDto
-{
-    public decimal Exit { get; set; }
-    public DateTimeOffset ExitTime { get; set; }
-    public string ExitReason { get; set; }
-    public decimal Fees { get; set; }
-    public decimal PlAmount { get; set; }
-    public decimal PlPercent { get; set; }
-    public decimal RealizedR { get; set; }
-    public string Outcome { get; set; } // "Win" or "Loss"
-    public bool FollowedRules { get; set; }
-}
+// public class CloseTradeDto
+// {
+//     public decimal Exit { get; set; }
+//     public DateTimeOffset ExitTime { get; set; }
+//     public string ExitReason { get; set; }
+//     public decimal Fees { get; set; }
+//     public decimal PlAmount { get; set; }
+//     public decimal PlPercent { get; set; }
+//     public decimal RealizedR { get; set; }
+//     public string Outcome { get; set; } // "Win" or "Loss"
+//     public bool FollowedRules { get; set; }
+// }
 
-public class UpdateOpenTradeDto
-{
-    public string Pair { get; set; }
-    public string Exchange { get; set; }
-    public string Direction { get; set; }
-    public string Setup { get; set; }
-    public string TimeFrame { get; set; }
-    public string EntryThesis { get; set; }
-    public string Context { get; set; }
-    public decimal EntryPlanned { get; set; }
-    public decimal Sl { get; set; }
-    public decimal Tp { get; set; }
-    public decimal Size { get; set; }
-    public decimal Leverage { get; set; }
-    public decimal EntryActual { get; set; }
-    public string PsyState { get; set; }
-    public decimal RiskPercent { get; set; }
-    public decimal RiskAmount { get; set; }
-    public decimal RrPlanned { get; set; }
-}
+// public class UpdateOpenTradeDto
+// {
+//     public string Pair { get; set; }
+//     public string Exchange { get; set; }
+//     public string Direction { get; set; }
+//     public string Setup { get; set; }
+//     public string TimeFrame { get; set; }
+//     public string EntryThesis { get; set; }
+//     public string Context { get; set; }
+//     public decimal EntryPlanned { get; set; }
+//     public decimal Sl { get; set; }
+//     public decimal Tp { get; set; }
+//     public decimal Size { get; set; }
+//     public decimal Leverage { get; set; }
+//     public decimal EntryActual { get; set; }
+//     public string PsyState { get; set; }
+//     public decimal RiskPercent { get; set; }
+//     public decimal RiskAmount { get; set; }
+//     public decimal RrPlanned { get; set; }
+// }
