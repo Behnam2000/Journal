@@ -4,12 +4,19 @@ using Journal.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Journal.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
+using Journal.Application.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Register Clean Architecture Layers
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Allow services to read the current HTTP request and JWT
+builder.Services.AddHttpContextAccessor();
+
+// Register the CurrentUserService implementation
+builder.Services.AddScoped<ICurrentUserService, Journal.Api.Services.CurrentUserService>();
 
 // 2. Add Controllers & prevent JSON looping
 builder.Services.AddControllers().AddJsonOptions(options =>
