@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Journal.Domain.Common;
+
 
 namespace Journal.Domain.Entities;
 
-public class DailyJournal
+public class DailyJournal : IUserOwnedEntity
 {
     public long Id { get; set; }
     public DateOnly Date { get; set; }
@@ -33,5 +35,7 @@ public class DailyJournal
 
     [NotMapped]
     public string Status => NetPlAmount.HasValue ? "Closed" : "Open";
+
+    public string UserId { get; set; } = string.Empty;
 
 }

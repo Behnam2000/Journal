@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Journal.Domain.Common;
 
 namespace Journal.Domain.Entities;
 
-public class Trade
+public class Trade : IUserOwnedEntity
 {
     public long Id { get; set; }
     public int TradeNumber { get; set; }
@@ -57,4 +58,6 @@ public class Trade
 
     [NotMapped]
     public string Status => ExitTime.HasValue ? "Closed" : "Open";
+
+    public string UserId { get; set; } = string.Empty;
 }
