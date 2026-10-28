@@ -96,6 +96,11 @@ namespace Journal.Infrastructure.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("total_trades");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
+
                     b.Property<string>("Volatility")
                         .HasColumnType("text")
                         .HasColumnName("volatility");
@@ -270,6 +275,11 @@ namespace Journal.Infrastructure.Migrations
                     b.Property<int>("TradeNumber")
                         .HasColumnType("integer")
                         .HasColumnName("trade_number");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("WentWell")
                         .HasColumnType("text")
