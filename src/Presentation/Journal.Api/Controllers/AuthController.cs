@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Journal.Application.Auth.Commands;
 using Journal.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Journal.Api.Controllers;
 
@@ -39,5 +40,17 @@ public class AuthController : ControllerBase
         if (!result.Success) return Unauthorized(result.Error);
 
         return Ok(new { Token = result.Token, RefreshToken = result.RefreshToken });
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
+    {
+        var success = await _mediator.Send(command);
+
+        if (!success)
+            return BadRequest("Invalid or already revoked token");
+
+        return NoContent(); // 204 No Content
     }
 }
