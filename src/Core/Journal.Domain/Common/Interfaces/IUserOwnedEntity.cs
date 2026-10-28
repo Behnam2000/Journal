@@ -1,4 +1,4 @@
-namespace Journal.Domain.Common;
+namespace Journal.Domain.Common.Interfaces;
 
 public interface IUserOwnedEntity
 {

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Journal.Domain.Common;
+using Journal.Domain.Common.Interfaces;
 
 
 namespace Journal.Domain.Entities;
