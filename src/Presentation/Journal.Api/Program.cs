@@ -24,6 +24,19 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+// Configure the CORS Service
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorClient", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader() // Allows the frontent to send the JWT in the Authorization header
+            .AllowAnyMethod(); // Allows GET, POST, PUT, DELETE
+    });
+});
+
 // 3. Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -47,6 +60,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
     });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
