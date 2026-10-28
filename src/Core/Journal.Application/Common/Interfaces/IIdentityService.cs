@@ -9,4 +9,5 @@ public interface IIdentityService
 
     // method to handle token rotation
     Task<(bool Result, string? Token, string? RefreshToken, string? Error)> RefreshTokenAsync(string expiredToken, string refreshToken);
+    Task<bool> LogoutAsync(string refreshToken);
 }

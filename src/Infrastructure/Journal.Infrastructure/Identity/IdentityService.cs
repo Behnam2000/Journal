@@ -74,6 +74,20 @@ public class IdentityService : IIdentityService
 
     }
 
+    public async Task<bool> LogoutAsync(string refreshToken)
+    {
+        var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == refreshToken);
+
+        if (storedToken == null || storedToken.IsRevoked)
+            return false; // Token doesen't exist or already revoked
+
+        storedToken.IsRevoked = true;
+        _context.RefreshTokens.Update(storedToken);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
     private async Task<(bool Result, string? Token, string? RefreshToken, string? Error)> GenerateTokenPairAsync(IdentityUser user)
     {
         var jwtToken = GenerateJwtToken(user);
