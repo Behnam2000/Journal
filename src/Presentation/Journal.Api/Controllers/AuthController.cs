@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Journal.Application.Auth.Commands;
+using Journal.Infrastructure.Identity;
 
 namespace Journal.Api.Controllers;
 
@@ -20,7 +21,7 @@ public class AuthController : ControllerBase
     {
         var result = await _mediator.Send(command);
         if (!result.Success) return BadRequest(result.Error);
-        return Ok(new { Token = result.Token });
+        return Ok(new { Token = result.Token, RefreshToken = result.RefreshToken });
     }
 
     [HttpPost("login")]
@@ -28,6 +29,15 @@ public class AuthController : ControllerBase
     {
         var result = await _mediator.Send(command);
         if (!result.Success) return Unauthorized(result.Error);
-        return Ok(new { Token = result.Token });
+        return Ok(new { Token = result.Token, RefreshToken = result.RefreshToken });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (!result.Success) return Unauthorized(result.Error);
+
+        return Ok(new { Token = result.Token, RefreshToken = result.RefreshToken });
     }
 }
