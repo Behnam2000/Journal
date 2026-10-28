@@ -19,6 +19,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>, IAppDbContext
     public DbSet<DailyJournal> DailyJournals { get; set; }
 
     public DbSet<Trade> Trades { get; set; }
+    public DbSet<Journal.Infrastructure.Identity.RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
