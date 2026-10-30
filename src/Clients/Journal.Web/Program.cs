@@ -27,6 +27,10 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthStateProvider>();
 
+// Make the AuthService available to your pages
+builder.Services.AddScoped<Journal.Web.Services.AuthService>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

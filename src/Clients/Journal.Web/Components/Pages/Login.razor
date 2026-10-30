@@ -1,0 +1,80 @@
+@page "/login"
+@rendermode InteractiveServer
+@using Journal.Web.Models
+@using Journal.Web.Services
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login - Trading Journal</PageTitle>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4">Login</h3>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger">@errorMessage</div>
+                }
+
+                <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <InputText @bind-Value="loginModel.Email" class="form-control" placeholder="name@example.com" />
+                        <ValidationMessage For="@(() => loginModel.Email)" class="text-danger mt-1" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <InputText @bind-Value="loginModel.Password" type="password" class="form-control" />
+                        <ValidationMessage For="@(() => loginModel.Password)" class="text-danger mt-1" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
+                        @if (isLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <span>Authenticating...</span>
+                        }
+                        else
+                        {
+                            <span>Login</span>
+                        }
+                    </button>
+                    
+                    <div class="text-center mt-3">
+                        <a href="/register" class="text-decoration-none">Don't have an account? Register here.</a>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginRequest loginModel = new();
+    private string? errorMessage;
+    private bool isLoading;
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        errorMessage = null;
+
+        var result = await AuthService.LoginAsync(loginModel);
+
+        if (result == null)
+        {
+            NavigationManager.NavigateTo("/"); // Redirect to dashboard on success
+        }
+        else
+        {
+            errorMessage = result; // Display API error
+        }
+
+        isLoading = false;
+    }
+}

@@ -15,16 +15,25 @@ public class AuthenticationHeaderHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        // Retrieve the JWT from the browser;s local storage
-        var token = await _localStorage.GetItemAsync<string>("authToken");
-
-        // If the token exists, attach it to the Authorization header
-        if (!string.IsNullOrWhiteSpace(token))
+        try
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            // Retrieve the JWT from the browser;s local storage
+            var token = await _localStorage.GetItemAsync<string>("authToken");
+
+            // If the token exists, attach it to the Authorization header
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // JavaScript interop is not available during static prerendering.
+            // Silently catch the error so the HTTP request can proceed without a token.
         }
 
         // Continue sending the HTTP request to the API
         return await base.SendAsync(request, cancellationToken);
+
     }
 }

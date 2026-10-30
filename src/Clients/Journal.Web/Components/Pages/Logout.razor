@@ -1,0 +1,32 @@
+@page "/logout"
+@rendermode InteractiveServer
+@using Journal.Web.Models
+@using Journal.Web.Auth
+@using Blazored.LocalStorage
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // 1. Get the refresh token
+        var refreshToken = await LocalStorage.GetItemAsync<string>("refreshToken");
+        
+        // 2. Tell the backend to revoke it in PostgreSQL
+        if (!string.IsNullOrWhiteSpace(refreshToken))
+        {
+            var request = new LogoutRequest { RefreshToken = refreshToken };
+            await Http.PostAsJsonAsync("api/auth/logout", request);
+        }
+
+        // 3. Delete both tokens from the browser
+        await LocalStorage.RemoveItemAsync("authToken");
+        await LocalStorage.RemoveItemAsync("refreshToken");
+
+        // 4. Update the UI state and redirect
+        ((JwtAuthStateProvider)AuthStateProvider).NotifyUserLogout();
+        NavigationManager.NavigateTo("/");
+    }
+}
