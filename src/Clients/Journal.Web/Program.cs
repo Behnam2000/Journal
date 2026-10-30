@@ -9,10 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Configure HttpClient to point to your backend API
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5194") });
+// 1. Register your custom handler
+builder.Services.AddTransient<AuthenticationHeaderHandler>();
 
-// Register Auth and LocalStorage
+// 2. Register the HttpClient and attach the interceptor
+builder.Services.AddHttpClient("JournalApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5194");
+})
+.AddHttpMessageHandler<AuthenticationHeaderHandler>();
+
+// 3. Make this customized client the default whenever you inject HttpClient into a page
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("JournalApi"));
+
+// 4. Register Auth and LocalStorage
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthStateProvider>();

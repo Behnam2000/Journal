@@ -18,10 +18,10 @@
 
 <body>
     <!-- Disable prerendering here: -->
-    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)">
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)" />
 
-        <ReconnectModal />
-        <script src="@Assets["_framework/blazor.web.js"]"></script>
-    </body>
+    <ReconnectModal />
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+</body>
 
 </html>
