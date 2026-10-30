@@ -11,13 +11,17 @@
     <link rel="stylesheet" href="@Assets["Journal.Web.styles.css"]" />
     <ImportMap />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <HeadOutlet />
+
+    <!-- Disable prerendering here: -->
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(prerender: false)" />
 </head>
 
 <body>
-    <Routes />
-    <ReconnectModal />
-    <script src="@Assets["_framework/blazor.web.js"]"></script>
-</body>
+    <!-- Disable prerendering here: -->
+    <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)">
+
+        <ReconnectModal />
+        <script src="@Assets["_framework/blazor.web.js"]"></script>
+    </body>
 
 </html>

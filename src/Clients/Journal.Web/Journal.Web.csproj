@@ -4,6 +4,11 @@
     <ProjectReference Include="..\Journal.SharedUI\Journal.SharedUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
+  </ItemGroup>
+
   <PropertyGroup>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
