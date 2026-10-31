@@ -9,27 +9,29 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// 1. Register your custom handler
-builder.Services.AddTransient<AuthenticationHeaderHandler>();
+// 1. Register the handler strictly to the user's Blazor circuit
+builder.Services.AddScoped<AuthenticationHeaderHandler>();
 
-// 2. Register the HttpClient and attach the interceptor
-builder.Services.AddHttpClient("JournalApi", client =>
+// 2. Manually construct the HttpClient to ensure it stays in the user's scope
+builder.Services.AddScoped(sp =>
 {
-    client.BaseAddress = new Uri("http://localhost:5194");
-})
-.AddHttpMessageHandler<AuthenticationHeaderHandler>();
+    var handler = sp.GetRequiredService<AuthenticationHeaderHandler>();
+    // Attach the base network handler
+    handler.InnerHandler = new HttpClientHandler();
 
-// 3. Make this customized client the default whenever you inject HttpClient into a page
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("JournalApi"));
+    return new HttpClient(handler)
+    {
+        BaseAddress = new Uri("http://localhost:5194")
+    };
+});
 
-// 4. Register Auth and LocalStorage
+// 3. Register Auth and LocalStorage
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddAuthenticationCore();
+builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthStateProvider>();
 
 // Make the AuthService available to your pages
 builder.Services.AddScoped<Journal.Web.Services.AuthService>();
-
 
 var app = builder.Build();
 

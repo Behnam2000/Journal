@@ -1,0 +1,152 @@
+@page "/journals"
+@rendermode InteractiveServer
+@* Removed [Authorize] attribute to prevent server-side crash on direct URL load *@
+@using Journal.Web.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>My Trading Journals</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container mt-4">
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mb-4">@errorMessage</div>
+            }
+            <div class="row">
+                <!-- Create New Journal Form -->
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Start New Trading Day</h5>
+                        </div>
+                        <div class="card-body">
+                            <EditForm Model="newJournal" OnValidSubmit="CreateJournal" Context="editContext">
+                                <DataAnnotationsValidator />
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Date</label>
+                                    <InputDate class="form-control" @bind-Value="newJournal.Date" />
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Starting Balance ($)</label>
+                                    <InputNumber class="form-control" @bind-Value="newJournal.StartingBalance" />
+                                    <ValidationMessage For="@(() => newJournal.StartingBalance)" class="text-danger" />
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100">Create Journal</button>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List of Existing Journals -->
+                <div class="col-md-8">
+                    <h3 class="mb-3">Journal History</h3>
+                    
+                    @if (journals == null)
+                    {
+                        <p><em>Loading journals...</em></p>
+                    }
+                    else if (!journals.Any())
+                    {
+                        <div class="alert alert-info">No trading journals found. Create one to get started!</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover shadow-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Starting Balance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var journal in journals.OrderByDescending(j => j.Date))
+                                    {
+                                        <tr>
+                                            <td>@journal.Date.ToShortDateString()</td>
+                                            <td>@journal.StartingBalance.ToString("C")</td>
+                                            <td>
+                                                <a href="/journals/@journal.Id/trades"
+                                                   class="btn btn-sm btn-outline-primary">View Trades</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="container mt-5 text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Verifying session...</p>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<DailyJournalDto>? journals;
+    private CreateJournalRequest newJournal = new();
+    private string? errorMessage;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // 1. Manually check if the user is authenticated via Local Storage
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            if (!authState.User.Identity?.IsAuthenticated ?? true)
+            {
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            // 2. Fetch the data securely
+            await LoadJournals();
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadJournals()
+    {
+        try
+        {
+            journals = await Http.GetFromJsonAsync<List<DailyJournalDto>>("api/daily-journals");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            // If the 15-minute token has expired, force a clean logout
+            NavigationManager.NavigateTo("/logout");
+        }
+    }
+
+    private async Task CreateJournal()
+    {
+        errorMessage = null; // Reset on new submission
+        var response = await Http.PostAsJsonAsync("api/daily-journals", newJournal);
+
+        if (response.IsSuccessStatusCode)
+        {
+            newJournal = new CreateJournalRequest();
+            await LoadJournals();
+            StateHasChanged();
+        }
+        else
+        {
+            // Capture and display the exact error from the backend
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            errorMessage = $"Failed to create journal (Status {response.StatusCode}): {errorDetails}";
+            StateHasChanged();
+        }
+    }
+}
