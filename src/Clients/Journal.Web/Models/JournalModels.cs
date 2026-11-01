@@ -4,9 +4,11 @@ namespace Journal.Web.Models;
 
 public class DailyJournalDto
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public DateOnly Date { get; set; }
     public decimal StartingBalance { get; set; }
+    public decimal? NetPlAmount { get; set; }
+    public short TotoalTrades { get; set; }
 }
 
 public class CreateJournalRequest

@@ -1,0 +1,245 @@
+@page "/journals/{JournalId:long}/trades"
+@rendermode InteractiveServer
+@using Journal.Web.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Trade Execution</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Trades Dashboard</h2>
+                <button class="btn btn-outline-secondary" @onclick='() => NavigationManager.NavigateTo("/journals")'>
+                    &larr; Back to Journals
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mb-4">@errorMessage</div>
+            }
+
+            <div class="row">
+                <!-- Log New Trade Form -->
+                <div class="col-lg-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Log New Execution</h5>
+                        </div>
+                        <div class="card-body">
+                            <EditForm Model="newTrade" OnValidSubmit="CreateTrade" Context="tradeContext">
+                                <DataAnnotationsValidator />
+                                
+                                <div class="row">
+                                    <!-- Section 1: Trade Context -->
+                                    <div class="col-md-4">
+                                        <h6 class="text-muted border-bottom pb-2">Trade Context</h6>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Pair</label>
+                                                <InputText class="form-control" @bind-Value="newTrade.Pair"
+                                                           placeholder="EUR/USD" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Exchange</label>
+                                                <InputText class="form-control" @bind-Value="newTrade.Exchange" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Direction</label>
+                                                <InputSelect class="form-select" @bind-Value="newTrade.Direction">
+                                                    <option value="Long">Long</option>
+                                                    <option value="Short">Short</option>
+                                                </InputSelect>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">TimeFrame</label>
+                                                <InputText class="form-control" @bind-Value="newTrade.TimeFrame"
+                                                           placeholder="5m, 1H" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Setup</label>
+                                            <InputText class="form-control" @bind-Value="newTrade.Setup" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Section 2: Entry Metrics -->
+                                    <div class="col-md-4 border-start border-end">
+                                        <h6 class="text-muted border-bottom pb-2">Entry Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Entry (Planned)</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.EntryPlanned" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Entry (Actual)</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.EntryActual" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Stop Loss</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.Sl" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Take Profit</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.Tp" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Size / Risk</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.Size" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Leverage</label>
+                                                <InputNumber class="form-control" @bind-Value="newTrade.Leverage" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Section 3: Psychology & Thesis -->
+                                    <div class="col-md-4">
+                                        <h6 class="text-muted border-bottom pb-2">Psychology & Thesis</h6>
+                                        <div class="mb-3">
+                                            <label class="form-label">Mental State (PsyState)</label>
+                                            <InputText class="form-control" @bind-Value="newTrade.PsyState"
+                                                       placeholder="Calm, FOMO, Rushed..." />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Entry Thesis</label>
+                                            <InputTextArea class="form-control" @bind-Value="newTrade.EntryThesis"
+                                                           rows="2"></InputTextArea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Market Context</label>
+                                            <InputTextArea class="form-control" @bind-Value="newTrade.Context" rows="2">
+                                            </InputTextArea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success mt-3">Log Execution</button>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List of Existing Trades -->
+                <div class="col-lg-12 mt-2">
+                    <h3 class="mb-3">Execution History</h3>
+                    @if (trades == null)
+                    {
+                        <p><em>Loading trades...</em></p>
+                    }
+                    else if (!trades.Any())
+                    {
+                        <div class="alert alert-light border">No trades logged for this day yet.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive shadow-sm">
+                            <table class="table table-hover bg-white mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Pair</th>
+                                        <th>Dir</th>
+                                        <th>Actual Entry</th>
+                                        <th>Exit</th>
+                                        <th>P&L</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var trade in trades)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@trade.Pair.ToUpper()</td>
+                                            <td>
+                                                <span class="badge @(trade.Direction == "Long" ? "bg-success" : "bg-danger")">
+                                                    @trade.Direction
+                                                </span>
+                                            </td>
+                                            <td>@trade.EntryActual.ToString("N4")</td>
+                                            <td>@(trade.Exit?.ToString("N4") ?? "-")</td>
+                                            <td class="@(trade.PlAmount >= 0 ? "text-success fw-bold" : "text-danger fw-bold")">
+                                                @(trade.PlAmount?.ToString("C2") ?? "-")
+                                            </td>
+                                            <td>
+                                                <span class="badge @(trade.Status == "Closed" ? "bg-secondary" : "bg-primary")">
+                                                    @trade.Status
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public long JournalId { get; set; } // Updated to long
+
+    private List<TradeDto>? trades;
+    private CreateTradeRequest newTrade = new();
+    private string? errorMessage;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            if (!authState.User.Identity?.IsAuthenticated ?? true)
+            {
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+
+            newTrade.DailyJournalId = JournalId;
+            await LoadTrades();
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadTrades()
+    {
+        try
+        {
+            trades = await Http.GetFromJsonAsync<List<TradeDto>>($"api/trades?journalId={JournalId}");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/logout");
+        }
+    }
+
+    private async Task CreateTrade()
+    {
+        errorMessage = null;
+        var response = await Http.PostAsJsonAsync("api/trades", newTrade);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            newTrade = new CreateTradeRequest { DailyJournalId = JournalId, Direction = "Long" };
+            await LoadTrades();
+            StateHasChanged();
+        }
+        else
+        {
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            errorMessage = $"Failed to save trade: {errorDetails}";
+            StateHasChanged();
+        }
+    }
+}
